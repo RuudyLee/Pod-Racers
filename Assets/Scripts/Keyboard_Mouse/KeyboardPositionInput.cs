@@ -39,7 +39,5 @@ public class KeyboardPositionInput : ControllerPositionInput
             positionInput.right -= smoothing * Time.deltaTime;
         }
         positionInput.right = Mathf.Clamp(positionInput.right, 0f, 1f);
-
-        Debug.Log(positionInput.left);
     }
 }
