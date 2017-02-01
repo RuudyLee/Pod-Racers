@@ -11,6 +11,7 @@ public class GamepadPositionInput : ControllerPositionInput {
 	
 	// Update is called once per frame
 	void Update () {
+        Debug.Log(Input.GetAxis("LeftJoystick"));
         positionInput.left = Input.GetAxis("LeftJoystick");
         positionInput.right = Input.GetAxis("RightJoystick");
     }

@@ -5,6 +5,8 @@ using UnityEngine;
 public class PodEngine : MonoBehaviour
 {
     public float speed = 5f;
+    public float lurkSpeed = 0.2f;
+
     ControllerPositionInput cpi;
     Rigidbody rb;
     public bool left = true;
@@ -19,6 +21,13 @@ public class PodEngine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Add a constant force forwards, feels more natural this way
+        if (cpi.positionInput.left > 0 || cpi.positionInput.right > 0)
+        {
+            rb.AddForce(transform.up * speed * Time.deltaTime);
+        }
+
+        // Read inputs and apply force accordingly
         float force;
         if (left)
         {
