@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 
 public class TextUpdate : MonoBehaviour {
-    public GameObject leftController;
+    public GameObject origin;
     Text m_text;
     
 	// Use this for initialization
@@ -15,7 +15,7 @@ public class TextUpdate : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        string val = leftController.GetComponent<RodMovement>().positionInput.y.ToString();
+        string val = origin.GetComponent<ControllerPositionInput>().positionInput.left.ToString();
         m_text.text = val.Substring(0, val.IndexOf(".") + 4);
 	}
 }
