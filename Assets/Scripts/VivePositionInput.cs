@@ -33,10 +33,12 @@ public class VivePositionInput : ControllerPositionInput
         rightDevice = SteamVR_Controller.Input((int)rightTrackedObj.index);
 
         // get position values based on calibration settings
+        Vector3 eyeToController;
         float displacement;
 
         // left controller
-        displacement = leftController.transform.position.z - playerHead.transform.position.z;
+        eyeToController = leftController.transform.position - playerHead.transform.position;
+        displacement = Vector3.Dot(eyeToController, transform.forward); // length of vector going towards forward
 
         positionInput.left = 0.0f;
         if ((!forceTriggerPress || leftDevice.GetHairTrigger()) &&
@@ -52,7 +54,8 @@ public class VivePositionInput : ControllerPositionInput
         }
 
         // now do the same thing for the right controller
-        displacement = rightController.transform.position.z - playerHead.transform.position.z;
+        eyeToController = rightController.transform.position - playerHead.transform.position;
+        displacement = Vector3.Dot(eyeToController, transform.forward);
 
         positionInput.right = 0.0f;
         if ((!forceTriggerPress || rightDevice.GetHairTrigger()) &&
