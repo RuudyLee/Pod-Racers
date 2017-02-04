@@ -21,7 +21,7 @@ public class PodEngine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Spherecast downwards
+        // Spherecast downwards to assist climbing uneven ground
         RaycastHit hitInfoDown;
         if (Physics.SphereCast(transform.position,
                                bodyCollider.radius,
@@ -31,7 +31,8 @@ public class PodEngine : MonoBehaviour
         {
             if (Mathf.Abs(Vector3.Angle(hitInfoDown.normal, Vector3.up)) < 85f)
             {
-                rb.velocity = Vector3.ProjectOnPlane(rb.velocity, hitInfoDown.normal);
+                float magnitude = rb.velocity.magnitude;
+                rb.velocity = Vector3.ProjectOnPlane(rb.velocity, hitInfoDown.normal).normalized * magnitude;
             }
         }
     }
@@ -41,7 +42,7 @@ public class PodEngine : MonoBehaviour
         // Add a constant force forwards, feels more natural this way
         if (cpi.positionInput.left > 0 || cpi.positionInput.right > 0)
         {
-            rb.AddForce(transform.forward * speed * Time.deltaTime);
+            rb.AddForce(transform.forward * lurkSpeed * Time.deltaTime);
         }
 
         // Read inputs and apply force accordingly

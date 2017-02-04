@@ -8,7 +8,6 @@ public class VivePositionInput : ControllerPositionInput
     public float zeroPosition = 0.035f;     // position at which input will be 0
     public float maxPosition = 0.05f;       // position at which input will be 1
     public bool forceTriggerPress = true;   // enable to output input on trigger press only
-    
 
     SteamVR_ControllerManager controllerManager;
     GameObject leftController, rightController;
@@ -38,7 +37,7 @@ public class VivePositionInput : ControllerPositionInput
 
         // left controller
         eyeToController = leftController.transform.position - playerHead.transform.position;
-        displacement = Vector3.Dot(eyeToController, transform.forward); // length of vector going towards forward
+        displacement = Vector3.ProjectOnPlane(eyeToController, playerHead.transform.forward).magnitude; // length of vector going towards forward
 
         positionInput.left = 0.0f;
         if ((!forceTriggerPress || leftDevice.GetHairTrigger()) &&
@@ -55,7 +54,7 @@ public class VivePositionInput : ControllerPositionInput
 
         // now do the same thing for the right controller
         eyeToController = rightController.transform.position - playerHead.transform.position;
-        displacement = Vector3.Dot(eyeToController, transform.forward);
+        displacement = Vector3.Project(eyeToController, playerHead.transform.forward).magnitude;
 
         positionInput.right = 0.0f;
         if ((!forceTriggerPress || rightDevice.GetHairTrigger()) &&
