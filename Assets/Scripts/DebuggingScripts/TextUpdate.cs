@@ -5,17 +5,17 @@ using UnityEngine.UI;
 
 
 public class TextUpdate : MonoBehaviour {
-    public GameObject origin;
-    Text m_text;
+    public ControllerPositionInput cpi;
+    public Text leftText;
+    public Text rightText;
     
 	// Use this for initialization
 	void Start () {
-        m_text = GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        string val = origin.GetComponent<ControllerPositionInput>().positionInput.left.ToString();
-        m_text.text = val.Substring(0, val.IndexOf(".") + 4);
+        leftText.text = cpi.positionInput.left.ToString();
+        rightText.text = cpi.positionInput.right.ToString();
 	}
 }

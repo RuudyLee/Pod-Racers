@@ -6,12 +6,12 @@ public class PodEngine : MonoBehaviour
 {
     public float speed = 50000f;
     public float lurkSpeed = 10000f;
-    public ControllerPositionInput cpi;    
+    public ControllerPositionInput cpi;
     public CapsuleCollider bodyCollider;
 
     Rigidbody rb;
     public bool left = true;
-   
+
     // Use this for initialization
     void Start()
     {

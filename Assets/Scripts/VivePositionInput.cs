@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VivePositionInput : ControllerPositionInput
 {
@@ -31,21 +32,25 @@ public class VivePositionInput : ControllerPositionInput
         leftDevice = SteamVR_Controller.Input((int)leftTrackedObj.index);
         rightDevice = SteamVR_Controller.Input((int)rightTrackedObj.index);
 
+        
         // get position values based on calibration settings
         Vector3 eyeToController;
         float displacement;
 
         // left controller
         eyeToController = leftController.transform.position - playerHead.transform.position;
-        displacement = Vector3.ProjectOnPlane(eyeToController, playerHead.transform.forward).magnitude; // length of vector going towards forward
+        displacement = Vector3.Dot(eyeToController, playerHead.transform.forward); // length of vector going towards forward
+        
+        if (leftDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad))
+        {
+            Debug.Log(displacement);
+        }
 
         positionInput.left = 0.0f;
-        if ((!forceTriggerPress || leftDevice.GetHairTrigger()) &&
-            displacement <= zeroPosition - deadZoneWidth &&
-            displacement >= zeroPosition + deadZoneWidth)
+        if (leftDevice.GetHairTrigger())
         {
             // the controller is outside of the deadzone, so get the input
-
+            
             // get a value from 0 to 1 based on calibration settings
             // clamped to 0 and 1 incase player goes beyond calibrated settings
             // can pod racers go backwards? change 0.0f to something like -0.2f if it can
@@ -54,12 +59,10 @@ public class VivePositionInput : ControllerPositionInput
 
         // now do the same thing for the right controller
         eyeToController = rightController.transform.position - playerHead.transform.position;
-        displacement = Vector3.Project(eyeToController, playerHead.transform.forward).magnitude;
-
+        displacement = Vector3.Dot(eyeToController, playerHead.transform.forward);
+        
         positionInput.right = 0.0f;
-        if ((!forceTriggerPress || rightDevice.GetHairTrigger()) &&
-            displacement <= zeroPosition - deadZoneWidth &&
-            displacement >= zeroPosition + deadZoneWidth)
+        if (rightDevice.GetHairTrigger())
         {
             positionInput.right = Mathf.Clamp((displacement - zeroPosition) / (maxPosition - zeroPosition), 0.0f, 1.0f);
         }
