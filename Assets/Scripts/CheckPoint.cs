@@ -5,11 +5,11 @@ using UnityEngine;
 public class CheckPoint : MonoBehaviour {
 
 
-    
+    public GameObject cpManager; 
 
 	// Use this for initialization
 	void Start () {
-        this.gameObject.SetActive(false);
+        
 	}
 	
 	// Update is called once per frame
@@ -19,7 +19,18 @@ public class CheckPoint : MonoBehaviour {
 
     void OnTriggerEnter(Collider player)
     {
-        this.gameObject.SetActive(false);
-        
+
+        if(player.tag == "Player")
+        {
+            cpManager.GetComponent<CheckPointManager>().incrActivCP();
+
+            //cpManager.GetComponent<CheckPointManager>().spawnNextCheck();
+
+            gameObject.SetActive(false);
+
+        }
+
+
     }
+
 }
