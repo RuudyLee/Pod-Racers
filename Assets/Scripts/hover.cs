@@ -11,6 +11,9 @@ public class hover : MonoBehaviour {
     public float hoverForce = 60.0f;
     public GameObject[] hoverPoints;
 
+    public float dragXZ = 3.0f;
+
+
     public float speed = 5.0f;
 
     public Transform L_thrusterPoint;
@@ -81,7 +84,17 @@ public class hover : MonoBehaviour {
 
 
         ////////experimental turning logic//////////
-        PodBase.AddForceAtPosition(L_thrusterPoint.transform.forward * speed * 25 * thrustValL, L_thrusterPoint.position);
-        PodBase.AddForceAtPosition(R_thrusterPoint.transform.forward * speed * 25 * thrustValR, R_thrusterPoint.position);
+        Vector3 CurrVel = PodBase.velocity;
+
+
+
+        //reduce velopcity over time
+        CurrVel *= 1 - Time.deltaTime * dragXZ;
+
+        PodBase.velocity = CurrVel;
+
+
+        PodBase.AddForceAtPosition(L_thrusterPoint.transform.forward * speed * 25 * thrustValL, L_thrusterPoint.position,ForceMode.Acceleration);
+        PodBase.AddForceAtPosition(R_thrusterPoint.transform.forward * speed * 25 * thrustValR, R_thrusterPoint.position,ForceMode.Acceleration);
     }
 }
