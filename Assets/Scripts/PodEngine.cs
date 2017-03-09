@@ -39,12 +39,6 @@ public class PodEngine : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Add a constant force forwards, feels more natural this way
-        if (cpi.positionInput.left > 0 || cpi.positionInput.right > 0)
-        {
-            rb.AddForce(transform.forward * lurkSpeed * Time.deltaTime);
-        }
-
         // Read inputs and apply force accordingly
         float force;
         if (left)
@@ -56,5 +50,7 @@ public class PodEngine : MonoBehaviour
             force = cpi.positionInput.right;
         }
         rb.AddForce(transform.forward * force * speed * Time.deltaTime);
+
+        
     }
 }

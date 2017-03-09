@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 public class VivePositionInput : ControllerPositionInput
 {
-    public float deadZoneWidth = 0.005f;    // width of the controller deadzone
-    public float zeroPosition = 0.035f;     // position at which input will be 0
-    public float maxPosition = 0.05f;       // position at which input will be 1
-    public bool forceTriggerPress = true;   // enable to output input on trigger press only
+    public float deadZoneWidth = 0.005f;        // width of the controller deadzone
+    public float zeroPosition = 0.035f;         // position at which input will be 0
+    public float maxPosition = 0.05f;           // position at which input will be 1
+    public float throttleAcceleration = 0.2f;   // the speed at which the throttle moves
+    public bool forceTriggerPress = true;       // enable to output input on trigger press only
 
     SteamVR_ControllerManager controllerManager;
     GameObject leftController, rightController;
@@ -23,6 +24,7 @@ public class VivePositionInput : ControllerPositionInput
         rightController = controllerManager.right;
         leftTrackedObj = leftController.GetComponent<SteamVR_TrackedObject>();
         rightTrackedObj = rightController.GetComponent<SteamVR_TrackedObject>();
+        bothEnginesOff = true;
     }
 
     // Update is called once per frame
@@ -32,7 +34,9 @@ public class VivePositionInput : ControllerPositionInput
         leftDevice = SteamVR_Controller.Input((int)leftTrackedObj.index);
         rightDevice = SteamVR_Controller.Input((int)rightTrackedObj.index);
 
-        
+        // Update states
+        bothEnginesOff = !(leftDevice.GetHairTrigger() || rightDevice.GetHairTrigger());
+
         // get position values based on calibration settings
         Vector3 eyeToController;
         float displacement;
@@ -41,25 +45,35 @@ public class VivePositionInput : ControllerPositionInput
         eyeToController = leftController.transform.position - playerHead.transform.position;
         displacement = Vector3.Dot(eyeToController, playerHead.transform.forward); // length of vector going towards forward
 
-        positionInput.left = 0.0f;
         if (leftDevice.GetHairTrigger())
         {
             // the controller is outside of the deadzone, so get the input
-            
-            // get a value from 0 to 1 based on calibration settings
+
+            // get a value from 0 to 1 based on calibration settings and slowly
+            // accelerate throttle to that value
             // clamped to 0 and 1 incase player goes beyond calibrated settings
             // can pod racers go backwards? change 0.0f to something like -0.2f if it can
-            positionInput.left = Mathf.Clamp((displacement - zeroPosition) / (maxPosition - zeroPosition), 0.0f, 1.0f);
+            float finalValue = Mathf.Lerp(positionInput.left, (displacement - zeroPosition) / (maxPosition - zeroPosition), throttleAcceleration);
+            positionInput.left = Mathf.Clamp(finalValue, 0.0f, 1.0f);
+        }
+        else
+        {
+            // engine is off, lerp throttle back to 0
+            positionInput.left = Mathf.Lerp(positionInput.left, 0.0f, throttleAcceleration);
         }
 
         // now do the same thing for the right controller
         eyeToController = rightController.transform.position - playerHead.transform.position;
         displacement = Vector3.Dot(eyeToController, playerHead.transform.forward);
         
-        positionInput.right = 0.0f;
         if (rightDevice.GetHairTrigger())
         {
-            positionInput.right = Mathf.Clamp((displacement - zeroPosition) / (maxPosition - zeroPosition), 0.0f, 1.0f);
+            float finalValue = Mathf.Lerp(positionInput.right, (displacement - zeroPosition) / (maxPosition - zeroPosition), throttleAcceleration);
+            positionInput.right = Mathf.Clamp(finalValue, 0.0f, 1.0f);
+        }
+        else
+        {
+            positionInput.right = Mathf.Lerp(positionInput.right, 0.0f, throttleAcceleration);
         }
     }
 }

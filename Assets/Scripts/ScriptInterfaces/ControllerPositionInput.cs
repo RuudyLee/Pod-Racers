@@ -5,6 +5,10 @@ using UnityEngine;
 public class ControllerPositionInput : MonoBehaviour
 {
     public GameObject playerHead;           // GameObject of the camera (in SteamVR, this is generally the (eye))
+
+    [HideInInspector]
+    public bool bothEnginesOff;
+
     public struct PositionInput
     {
         public float left;
