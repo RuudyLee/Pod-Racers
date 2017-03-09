@@ -40,11 +40,6 @@ public class VivePositionInput : ControllerPositionInput
         // left controller
         eyeToController = leftController.transform.position - playerHead.transform.position;
         displacement = Vector3.Dot(eyeToController, playerHead.transform.forward); // length of vector going towards forward
-        
-        if (leftDevice.GetPress(SteamVR_Controller.ButtonMask.Touchpad))
-        {
-            Debug.Log(displacement);
-        }
 
         positionInput.left = 0.0f;
         if (leftDevice.GetHairTrigger())
