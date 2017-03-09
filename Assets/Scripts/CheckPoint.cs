@@ -5,7 +5,7 @@ using UnityEngine;
 public class CheckPoint : MonoBehaviour {
 
 
-    public GameObject cpManager; 
+    public CheckPointManager cpManager; 
 
 	// Use this for initialization
 	void Start () {
@@ -22,7 +22,7 @@ public class CheckPoint : MonoBehaviour {
 
         if(player.tag == "Player")
         {
-            cpManager.GetComponent<CheckPointManager>().incrActivCP();
+            cpManager.incrActivCP();
 
             //cpManager.GetComponent<CheckPointManager>().spawnNextCheck();
 

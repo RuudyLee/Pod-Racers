@@ -2,23 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckPointManager : MonoBehaviour {
+public class CheckPointManager : MonoBehaviour
+{
 
     public GameObject[] cp; //holds all check points
 
-    int activeCP = 0;
+    int activeCP;
 
-	// Use this for initialization
+    // Use this for initialization
 
-        
-	void Start () {
-		if(cp.Length < 0)
+
+    void Start()
+    {
+        if (cp.Length < 0)
         {
-            Debug.Log("nothing inside checkpoint goroup");
+            Debug.Log("nothing inside checkpoint group");
         }
         else
         {
-            for(int i = 0;i<cp.Length;i++)
+            for (int i = 0; i < cp.Length; i++)
             {
                 cp[i].SetActive(false);
             }
@@ -27,20 +29,21 @@ public class CheckPointManager : MonoBehaviour {
 
             cp[activeCP].SetActive(true);
         }
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
 
-        Debug.Log(activeCP);
+    // Update is called once per frame
+    void Update()
+    {
 
-	}
+        //Debug.Log(activeCP);
+
+    }
 
     public void incrActivCP()
     {
         activeCP++;
 
-        if(activeCP >= cp.Length)
+        if (activeCP >= cp.Length)
         {
             activeCP = 0;
         }
