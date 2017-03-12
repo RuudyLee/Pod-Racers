@@ -29,8 +29,11 @@ public class CustomDrag : MonoBehaviour
         {
             rb.velocity *= friction;
 
-            // encourage the rigidbody to move straight
-            rb.velocity = Vector3.Lerp(rb.velocity, transform.forward * rb.velocity.magnitude, 0.1f);
+            // encourage the rigidbody to move straight if player is trying to go straight
+            if (Mathf.Abs(cpi.positionInput.left - cpi.positionInput.right) < 0.01f)
+            {
+                rb.velocity = Vector3.Lerp(rb.velocity, transform.forward * rb.velocity.magnitude, 0.05f);
+            }
         }
     }
 }
