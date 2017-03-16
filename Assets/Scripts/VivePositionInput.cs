@@ -19,6 +19,14 @@ public class VivePositionInput : ControllerPositionInput
     // Use this for initialization
     void Start()
     {
+        // Calibrate based on user calibration
+        CalibrationSettings calibrationSettings = GameObject.Find("Calibration Settings").GetComponent<CalibrationSettings>();
+        if (calibrationSettings)
+        {
+            zeroPosition = calibrationSettings.zeroPosition;
+            maxPosition = calibrationSettings.maxPosition;
+        }
+
         controllerManager = GetComponent<SteamVR_ControllerManager>();
         leftTrackedObj = controllerManager.left.GetComponent<SteamVR_TrackedObject>();
         rightTrackedObj = controllerManager.right.GetComponent<SteamVR_TrackedObject>();
