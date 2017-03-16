@@ -24,7 +24,7 @@ public class CalibrationSettings : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        controllerManager = GetComponent<SteamVR_ControllerManager>();
+        controllerManager = GameObject.Find("[CameraRig]").GetComponent<SteamVR_ControllerManager>();
         leftTrackedObj = controllerManager.left.GetComponent<SteamVR_TrackedObject>();
         rightTrackedObj = controllerManager.right.GetComponent<SteamVR_TrackedObject>();
     }
@@ -32,7 +32,17 @@ public class CalibrationSettings : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (leftDevice.GetHairTriggerDown() || rightDevice.GetHairTriggerDown())
+        if (calibrationState == CalibrationState.StartGame)
+        {
+            if (timer < 0)
+            {
+                SceneManager.LoadScene("test");
+            }
+
+            text.text = "Calibration Done!\n Starting in " + ((int)timer).ToString() + "...";
+            timer -= Time.deltaTime;
+        }
+        else if (leftDevice.GetHairTriggerDown() || rightDevice.GetHairTriggerDown())
         {
             if (calibrationState == CalibrationState.CalibrateMin)
             {
@@ -48,16 +58,6 @@ public class CalibrationSettings : MonoBehaviour
                 maxPosition = (getDisplacement(leftTrackedObj) + getDisplacement(rightTrackedObj)) / 2;
 
                 calibrationState = CalibrationState.StartGame;
-            }
-            else if (calibrationState == CalibrationState.StartGame)
-            {
-                if (timer < 0)
-                {
-                    SceneManager.LoadScene("test");
-                }
-
-                text.text = "Calibration Done!\n Starting in " + ((int)timer).ToString() + "...";
-                timer -= Time.deltaTime;
             }
             else
             {

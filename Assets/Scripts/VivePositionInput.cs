@@ -20,12 +20,12 @@ public class VivePositionInput : ControllerPositionInput
     void Start()
     {
         // Calibrate based on user calibration
-        CalibrationSettings calibrationSettings = GameObject.Find("Calibration Settings").GetComponent<CalibrationSettings>();
-        if (calibrationSettings)
-        {
-            zeroPosition = calibrationSettings.zeroPosition;
-            maxPosition = calibrationSettings.maxPosition;
-        }
+        //CalibrationSettings calibrationSettings = GameObject.Find("Calibration Settings").GetComponent<CalibrationSettings>();
+        //if (calibrationSettings)
+        //{
+        //    zeroPosition = calibrationSettings.zeroPosition;
+        //    maxPosition = calibrationSettings.maxPosition;
+        //}
 
         controllerManager = GetComponent<SteamVR_ControllerManager>();
         leftTrackedObj = controllerManager.left.GetComponent<SteamVR_TrackedObject>();
@@ -65,7 +65,7 @@ public class VivePositionInput : ControllerPositionInput
     {
         Vector3 eyeToController = trackedObj.transform.position - transform.position;   // vector from the eye to the controller
         float displacement = Vector3.Dot(eyeToController, transform.forward);           // length of vector going towards forward
-
+        
         // get a value from 0 to 1 based on calibration settings and slowly
         // accelerate throttle to that value
         // clamped to 0 and 1 incase player goes beyond calibrated settings
