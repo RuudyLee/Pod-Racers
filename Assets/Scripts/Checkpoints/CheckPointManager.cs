@@ -7,6 +7,8 @@ public class CheckPointManager : MonoBehaviour
 
     CheckPoint[] checkpoints; //holds all check points
 
+    [HideInInspector]
+    public CheckPoint activeCheckpoint;
     int activeCP;
 
     // Use this for initialization
@@ -27,6 +29,7 @@ public class CheckPointManager : MonoBehaviour
             }
 
             activeCP = 0;
+            activeCheckpoint = checkpoints[activeCP];
 
             checkpoints[activeCP].gameObject.SetActive(true);
         }
@@ -42,7 +45,7 @@ public class CheckPointManager : MonoBehaviour
 
     public void incrActivCP()
     {
-        activeCP++;
+        activeCheckpoint = checkpoints[++activeCP];
 
         if (activeCP >= checkpoints.Length)
         {
@@ -57,5 +60,4 @@ public class CheckPointManager : MonoBehaviour
 
         checkpoints[activeCP].gameObject.SetActive(true);
     }
-
 }
